@@ -2,27 +2,25 @@
 
 set -e
 
-echo "=== Updating packages and installing required dependencies ==="
-sudo apt update
-sudo apt install -y software-properties-common curl wget git
+echo "🧼 Removing old Node.js (if any)..."
+apt remove -y nodejs || true
 
-echo "=== Installing the latest version of Git ==="
-sudo add-apt-repository -y ppa:git-core/ppa
-sudo apt update
-sudo apt install -y git
-echo "Git installed, version: $(git --version)"
+echo "🔄 Updating package lists..."
+apt update
 
-echo "=== Installing NVM (Node Version Manager) ==="
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+echo "📦 Installing required dependencies..."
+apt install -y curl wget git software-properties-common
 
-# Load NVM into the current shell session
-export NVM_DIR="$HOME/.nvm"
-source "$NVM_DIR/nvm.sh"
+echo "🛠 Adding Git PPA and installing latest Git..."
+add-apt-repository -y ppa:git-core/ppa
+apt update
+apt install -y git
 
-echo "=== Installing the latest version of Node.js and npm ==="
-nvm install node
+echo "✅ Git installed, version: $(git --version)"
 
-echo "Node.js installed, version: $(node -v)"
-echo "npm installed, version: $(npm -v)"
+echo "⬇️ Installing Node.js v20 from official NodeSource repo..."
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+apt install -y nodejs
 
-echo "✅ Installation completed successfully."
+echo "✅ Node.js installed, version: $(node -v)"
+echo "✅ npm installed, version: $(npm -v)"
